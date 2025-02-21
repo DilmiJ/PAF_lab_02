@@ -1,0 +1,341 @@
+SQL*Plus: Release 21.0.0.0.0 - Production on Tue Feb 18 06:20:40 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Tue Feb 18 2025 06:14:21 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> create table client
+  2
+SQL>
+SQL>
+SQL>
+SQL>
+SQL> create TABLE client (
+  2      clno char(3),
+  3      name varchar(12),
+  4      address varchar(30),
+  5      primary KEY (clno)
+  6  );
+
+Table created.
+
+SQL>
+SQL> CREATE TABLE stock (
+  2      company char(7),
+  3      price NUMBER(6,2),
+  4      dividend NUMBER(4,2),
+  5      eps NUMBER(4,2),
+  6      PRIMARY KEY (company)
+  7  );
+
+Table created.
+
+SQL> CREATE TABLE trading (
+  2      company char(7),
+  3      exchange varchar(12),
+  4      PRIMARY KEY (company, exchange),
+  5      FOREIGN KEY (company) REFERENCES stock(company)
+  6  );
+
+//මෙයින් අදහස් කරන්නේ වෙළඳ වගුවේ සමාගම් තීරුව කොටස් වගුවේ පවතින සමාගම් අගයකට අනුරූප විය යුතු බවයි.
+
+//This means that the company column in the trading table must match an existing company value in the stock table.
+
+
+
+Table created.
+
+SQL>
+SQL> CREATE TABLE purchase (
+  2      clno char(3),
+  3      company char(7),
+  4      pdate TEXT,
+  5      qty INTEGER,
+  6      price REAL,
+  7      PRIMARY KEY (clno, company, pdate),
+  8      FOREIGN KEY (clno) REFERENCES client(clno),
+  9      FOREIGN KEY (company) REFERENCES stock(company)
+ 10  );
+    pdate TEXT,
+          *
+ERROR at line 4:
+ORA-00902: invalid datatype
+
+
+SQL> CREATE TABLE purchase (
+  2      clno char(3),
+  3      company char(7),
+  4      pdate TEXT,
+  5      qty INTEGER,
+  6      price REAL,
+  7      PRIMARY KEY (clno, company, pdate),
+  8      FOREIGN KEY (clno) REFERENCES client(clno),
+  9      FOREIGN KEY (company) REFERENCES stock(company)
+ 10  );
+    pdate TEXT,
+          *
+ERROR at line 4:
+ORA-00902: invalid datatype
+
+
+SQL> CREATE TABLE purchase (
+  2      clno char(3),
+  3      company char(7),
+  4      pdate TEXT,
+  5      FOREIGN KEY (company) REFERENCES stock(company)
+  6
+SQL>
+SQL> CREATE TABLE purchase (
+  2      clno char(3),
+  3      company char(7),
+  4      pdate vachar,
+  5      qty INTEGER,
+  6      price REAL,
+  7      PRIMARY KEY (clno, company, pdate),
+  8      FOREIGN KEY (clno) REFERENCES client(clno),
+  9      FOREIGN KEY (company) REFERENCES stock(company)
+ 10  );
+    pdate vachar,
+          *
+ERROR at line 4:
+ORA-00902: invalid datatype
+
+
+SQL> CREATE TABLE purchase (
+  2      clno CHAR(3),
+  3      company CHAR(7),
+  4      pdate VARCHAR2(20), -- Corrected "vachar" to "VARCHAR2"
+
+  5      qty INTEGER,
+  6      price REAL,
+  7      PRIMARY KEY (clno, company, pdate),
+  8      FOREIGN KEY (clno) REFERENCES client(clno),
+  9      FOREIGN KEY (company) REFERENCES stock(company)
+ 10  );
+
+Table created.
+
+SQL> INSERT INTO client VALUES ('c01', 'John Smith', '3 East Av, Bentley, WA 6102');
+
+1 row created.
+
+SQL> INSERT INTO client VALUES ('c02', 'Jill Brody', '42 Bent St, Perth, WA 6001');
+
+1 row created.
+
+SQL>
+SQL> SELECT*FROM client
+  2
+SQL>
+SQL>
+SQL> SQL> SELECT*FROM client
+SP2-0734: unknown command beginning "SQL> SELEC..." - rest of line ignored.
+SQL> INSERT INTO stock VALUES ('BHP', 10.50, 1.50, 3.20);
+
+1 row created.
+
+SQL> INSERT INTO stock VALUES ('IBM', 70.00, 4.25, 10.00);
+
+1 row created.
+
+SQL> INSERT INTO stock VALUES ('INTEL', 76.50, 5.00, 12.40);
+
+1 row created.
+
+SQL> INSERT INTO stock VALUES ('FORD', 40.00, 2.00, 8.50);
+
+1 row created.
+
+SQL> INSERT INTO stock VALUES ('GM', 60.00, 2.50, 9.20);
+
+1 row created.
+
+SQL> INSERT INTO stock VALUES ('INFOSYS', 45.00, 3.00, 7.80);
+
+1 row created.
+
+SQL>
+SQL>
+SQL> SELECT*FROM stock
+  2
+SQL> INSERT INTO trading VALUES ('BHP', 'Sydney');
+
+1 row created.
+
+SQL> INSERT INTO trading VALUES ('BHP', 'New York');
+
+1 row created.
+
+SQL> INSERT INTO trading VALUES ('IBM', 'New York');
+
+1 row created.
+
+SQL> INSERT INTO trading VALUES ('IBM', 'London');
+
+1 row created.
+
+SQL> INSERT INTO trading VALUES ('IBM', 'Tokyo');
+
+1 row created.
+
+SQL> INSERT INTO trading VALUES ('INTEL', 'New York');
+
+1 row created.
+
+SQL> INSERT INTO trading VALUES ('INTEL', 'London');
+
+1 row created.
+
+SQL> INSERT INTO trading VALUES ('FORD', 'New York');
+
+1 row created.
+
+SQL> INSERT INTO trading VALUES ('GM', 'New York');
+
+1 row created.
+
+SQL> INSERT INTO trading VALUES ('INFOSYS', 'New York');
+
+1 row created.
+
+SQL> INSERT INTO purchase VALUES ('c01', 'BHP', '2001-10-02', 1000, 12.00);
+
+1 row created.
+
+SQL> INSERT INTO purchase VALUES ('c01', 'BHP', '2002-06-08',  2000, 10.50);
+
+1 row created.
+
+SQL> INSERT INTO purchase VALUES ('c01', 'IBM', '2000-02-12', 500, 58.00);
+
+1 row created.
+
+SQL> INSERT INTO purchase VALUES ('c01', 'IBM', '2001-04-10', 1200, 65.00);
+
+1 row created.
+
+SQL> INSERT INTO purchase VALUES ('c01', 'INFOSYS', '2001-08-11', 1000, 64.00);
+
+1 row created.
+
+SQL> INSERT INTO purchase VALUES ('c02', 'INTEL', '2000-01-30', 300, 35.00);
+
+1 row created.
+
+SQL> INSERT INTO purchase VALUES ('c02', 'INTEL', '2001-01-30', 400, 54.00);
+
+1 row created.
+
+SQL> INSERT INTO purchase VALUES ('c02', 'INTEL','2001-10-02',200, 60.00);
+
+1 row created.
+
+SQL> INSERT INTO purchase VALUES ('c02', 'FORD','1999-10-05', 300, 40.00);
+
+1 row created.
+
+SQL> INSERT INTO purchase VALUES ('c02', 'GM','2000-12-12', 500, 55.50);
+
+1 row created.
+
+SQL> SELECT c.name AS client_name,
+  2         p.company AS stock_name,
+  3         s.price AS current_price,
+  4         s.dividend AS last_dividend,
+  5         s.eps AS earnings_per_share
+  6  FROM client c
+  7  JOIN purchase p ON c.clno = p.clno
+  8  JOIN stock s ON p.company = s.company;
+
+CLIENT_NAME  STOCK_N CURRENT_PRICE LAST_DIVIDEND EARNINGS_PER_SHARE
+------------ ------- ------------- ------------- ------------------
+John Smith   BHP              10.5           1.5               3.2
+John Smith   BHP              10.5           1.5               3.2
+John Smith   IBM                70          4.25
+10
+John Smith   IBM                70          4.25
+10
+John Smith   INFOSYS            45             3               7.8
+Jill Brody   INTEL            76.5             5               12.4
+Jill Brody   INTEL            76.5             5               12.4
+Jill Brody   INTEL            76.5             5               12.4
+Jill Brody   FORD               40             2               8.5
+Jill Brody   GM                 60           2.5               9.2
+
+10 rows selected.
+
+SQL> SELECT c.name AS client_name,
+  2         p.company AS stock_name,
+  3         SUM(p.qty) AS total_shares_held,
+  4         ROUND(SUM(p.qty * p.price) / SUM(p.qty), 2) AS avg_purchase_price
+  5  FROM client c
+  6  JOIN purchase p ON c.clno = p.clno
+  7  GROUP BY c.name, p.company;
+
+CLIENT_NAME  STOCK_N TOTAL_SHARES_HELD AVG_PURCHASE_PRICE
+------------ ------- ----------------- ------------------
+John Smith   BHP                  3000                 11
+John Smith   IBM                  1700              62.94
+John Smith   INFOSYS              1000                 64
+Jill Brody   INTEL                 900                 49
+Jill Brody   FORD                  300                 40
+Jill Brody   GM                    500               55.5
+
+6 rows selected.
+
+SQL> SELECT p.company AS stock_name,
+  2         c.name AS client_name,
+  3         SUM(p.qty) AS shares_held,
+  4         SUM(p.qty * s.price) AS current_value
+  5  FROM purchase p
+  6  JOIN client c ON p.clno = c.clno
+  7  JOIN stock s ON p.company = s.company
+  8  JOIN trading t ON p.company = t.company
+  9  WHERE t.exchange = 'New York'
+ 10  GROUP BY p.company, c.name;
+
+STOCK_N CLIENT_NAME  SHARES_HELD CURRENT_VALUE
+------- ------------ ----------- -------------
+BHP     John Smith          3000         31500
+IBM     John Smith          1700        119000
+INFOSYS John Smith          1000         45000
+INTEL   Jill Brody           900         68850
+FORD    Jill Brody           300         12000
+GM      Jill Brody           500         30000
+
+6 rows selected.
+
+SQL> SELECT c.name AS client_name,
+  2         SUM(p.qty * p.price) AS total_purchase_value
+  3  FROM client c
+  4  JOIN purchase p ON c.clno = p.clno
+  5  GROUP BY c.name;
+
+CLIENT_NAME  TOTAL_PURCHASE_VALUE
+------------ --------------------
+John Smith                 204000
+Jill Brody                  83850
+
+SQL>
+SQL> SELECT c.name AS client_name,
+  2         SUM(p.qty * s.price) - SUM(p.qty * p.price) AS book_profit
+  3  FROM client c
+  4  JOIN purchase p ON c.clno = p.clno
+  5  JOIN stock s ON p.company = s.company
+  6  GROUP BY c.name;
+
+CLIENT_NAME  BOOK_PROFIT
+------------ -----------
+John Smith         -8500
+Jill Brody         27000
+
+SQL>
+
+
